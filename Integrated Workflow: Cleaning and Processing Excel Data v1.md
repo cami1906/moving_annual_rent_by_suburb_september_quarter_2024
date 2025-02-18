@@ -14,7 +14,6 @@ The VBA script performs the following actions:
 ### Open the file `moving_annual_rent_by_suburb_september_quarter_2024_vba.xlsx` in Excel and run the following VBA macro:
 
 ```vba
-```vba
 Sub DeleteRowsWithGroupTotalAndCleanHeaders()
     Dim wb As Workbook
     Dim ws As Worksheet
@@ -123,13 +122,13 @@ End Sub
 ## 2. Processing and Exporting Data with Python
 ### 2.1 Overview
 ### The Python script performs the following tasks:
- 
+### 
 ### - Reads the cleaned Excel file (with two header rows).
 ### - Processes a single sheet (e.g., 1_bedroom_flat) as an example, then processes all sheets.
 ### - Converts the data from wide to long format.
 ### - Formats data types and values.
 ### - Exports the results as a multi-tab Excel file.
-### - Optionally exports each sheet into separate Excel files and compresses them into a ZIP file.
+### - Optionally exports each sheet into separate CSV Files and compresses them into a ZIP file.
 
 
 ### 2.2 Reading the Excel File
@@ -200,7 +199,6 @@ print(df_reformatted['Area'].unique().tolist())
 ```python
 # Dictionary to store the processed DataFrames from each sheet
 processed_sheets = {}
-
 for sheet_name, df in all_sheets.items():
     print(f"\nProcessing sheet: {sheet_name}")
     print("Original columns:", df.columns.tolist())
@@ -255,29 +253,29 @@ with pd.ExcelWriter(output_filename) as writer:
 print(f"\nAll processed sheets have been written to {output_filename}")
 ```
 
-####    2.8.b Writing Each Processed Sheet to Separate Excel Files and Compressing into a ZIP file
+####    2.8.b Writing Each Processed Sheet to CSV Files and Compressing into a ZIP file
 ```python
 import os
 import shutil
 
-# Create a temporary output directory to hold individual Excel files
+# Create a temporary output directory to hold individual CSV files
 temp_output_dir = 'moving_annual_rent_by_suburb_september_quarter_2024_temp'
 if not os.path.exists(temp_output_dir):
     os.makedirs(temp_output_dir)
 
-# Write each processed DataFrame to its own Excel file in the temporary directory
+# Write each processed DataFrame to its own CSV file in the temporary directory
 for sheet_name, df_reformatted in processed_sheets.items():
-    output_file = os.path.join(temp_output_dir, f"{sheet_name}.xlsx")
-    df_reformatted.to_excel(output_file, index=False)
+    output_file = os.path.join(temp_output_dir, f"{sheet_name}.csv")
+    df_reformatted.to_csv(output_file, index=False)
     print(f"Sheet '{sheet_name}' written to {output_file}")
 
-# Define the base name for the zip file
+# Define the base name for the zip file (without the .zip extension)
 zip_base_name = 'moving_annual_rent_by_suburb_september_quarter_2024'
 zip_filename = f"{zip_base_name}.zip"
 
-# Create a zip file from the temporary output directory
+# Create a zip file from the temporary output directory containing the CSV files
 shutil.make_archive(zip_base_name, 'zip', temp_output_dir)
-print(f"\nAll processed sheets have been zipped into {zip_filename}")
+print(f"\nAll processed CSV sheets have been zipped into {zip_filename}")
 ```
 
 ## 3. Summary
