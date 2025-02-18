@@ -14,6 +14,7 @@ The VBA script performs the following actions:
 ### Open the file `moving_annual_rent_by_suburb_september_quarter_2024_vba.xlsx` in Excel and run the following VBA macro:
 
 ```vba
+```vba
 Sub DeleteRowsWithGroupTotalAndCleanHeaders()
     Dim wb As Workbook
     Dim ws As Worksheet
@@ -22,6 +23,7 @@ Sub DeleteRowsWithGroupTotalAndCleanHeaders()
     Dim lastRow As Long
     Dim isMerged As Boolean
     Dim currentArea As String
+    Dim originalString As String, processedString As String
 
     ' Define the worksheet names
     wsNames = Array("1_bedroom_flat", "2_bedroom_flat", "3_bedroom_flat", _
@@ -92,7 +94,9 @@ Sub DeleteRowsWithGroupTotalAndCleanHeaders()
             For j = 3 To lastRow
                 ' If Column A has a non-empty value, update currentArea
                 If Len(Trim(ws.Cells(j, 1).Value)) > 0 Then
-                    currentArea = ws.Cells(j, 1).Value
+                    originalString = Trim(ws.Cells(j, 1).Value)
+                    processedString = Replace(originalString, " ", "_") & "_"  ' Replace all spaces with '_' and add an extra '_'
+                    currentArea = processedString
                 End If
 
                 ' Concatenate currentArea with the value in Column B and write to Column C
@@ -119,7 +123,7 @@ End Sub
 ## 2. Processing and Exporting Data with Python
 ### 2.1 Overview
 ### The Python script performs the following tasks:
-### 
+ 
 ### - Reads the cleaned Excel file (with two header rows).
 ### - Processes a single sheet (e.g., 1_bedroom_flat) as an example, then processes all sheets.
 ### - Converts the data from wide to long format.
